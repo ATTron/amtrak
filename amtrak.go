@@ -27,6 +27,7 @@ const publicKey = "69af143c-e8cf-47f8-bf09-fc1f61e5cc33"
 const masterSegment = 88
 
 var allTrains = make(map[string]Train)
+var attempts = 0
 
 // GetAllTrains - return information on all trains
 func GetAllTrains() map[string]Train {
@@ -41,25 +42,37 @@ func GetTrain(trainNum int) Train {
 }
 
 // fetchData - go and get the latest train information
-func fetchData() string {
-	resp, err := http.Get(endPoint)
-	util.Check(err)
-
-	defer resp.Body.Close()
-	responseData, err := ioutil.ReadAll(resp.Body)
-	util.Check(err)
-	encryptedContent := responseData[:len(responseData)-masterSegment]
-	encryptedPrivateKey := responseData[len(responseData)-masterSegment:]
-	privateKey := decryptData(encryptedPrivateKey, publicKey)
-	content := decryptData(encryptedContent, strings.Split(privateKey, "|")[0])
-
-	return content
+func fetchData() (string, error) {
+	content := ""
+attempt:
+	for attempts < 3 {
+		resp, err := http.Get(endPoint)
+		util.Check(err)
+		defer resp.Body.Close()
+		switch resp.StatusCode {
+		case 200:
+			responseData, err := ioutil.ReadAll(resp.Body)
+			util.Check(err)
+			encryptedContent := responseData[:len(responseData)-masterSegment]
+			encryptedPrivateKey := responseData[len(responseData)-masterSegment:]
+			privateKey := decryptData(encryptedPrivateKey, publicKey)
+			content = decryptData(encryptedContent, strings.Split(privateKey, "|")[0])
+			break attempt
+		default:
+			attempts++
+		}
+	}
+	if attempts >= 3 {
+		return "", util.ErrNotFound
+	}
+	return content, nil
 }
 
 // cleanData - massage the data out
 func cleanData() {
 	stationNumRegex := re.MustCompile(`\D*`)
-	content := fetchData()
+	content, err := fetchData()
+	util.Check(err)
 
 	features := gjson.Get(content, "features")
 
