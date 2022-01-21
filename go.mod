@@ -1,4 +1,4 @@
-module gitlab.com/ATTron/amtrak
+module github.com/ATTron/amtrak
 
 go 1.17
 

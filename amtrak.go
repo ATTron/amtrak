@@ -14,8 +14,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/ATTron/amtrak/util"
 	"github.com/tidwall/gjson"
-	"gitlab.com/ATTron/amtrak/util"
 	"golang.org/x/crypto/pbkdf2"
 )
 
