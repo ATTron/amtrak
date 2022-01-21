@@ -5,11 +5,10 @@ import (
 	"log"
 )
 
-var ErrBadType = errors.New("unable to find api request of that type")
-var ErrNotFound = errors.New("no results found for your request")
+var ErrNotFound = errors.New("cannot fetch fetch at this time. please try again")
 
 func Check(err error) {
 	if err != nil {
-		log.Fatal("Unable to complete request due to error!", err)
+		log.Fatal("Unable to complete request due to error! ", err)
 	}
 }
