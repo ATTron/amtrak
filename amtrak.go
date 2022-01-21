@@ -48,9 +48,9 @@ attempt:
 	for attempts < 3 {
 		resp, err := http.Get(endPoint)
 		util.Check(err)
+		defer resp.Body.Close()
 		switch resp.StatusCode {
 		case 200:
-			defer resp.Body.Close()
 			responseData, err := ioutil.ReadAll(resp.Body)
 			util.Check(err)
 			encryptedContent := responseData[:len(responseData)-masterSegment]
