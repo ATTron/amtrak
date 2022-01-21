@@ -131,7 +131,7 @@ func decryptData(encrypted []byte, key string) string {
 	cipherTextDecoded, err := base64.StdEncoding.DecodeString(string(encrypted))
 	util.Check(err)
 
-	encryptedIV, err := hex.DecodeString(iValue)
+	decryptedIV, err := hex.DecodeString(iValue)
 	util.Check(err)
 
 	theKey := pbkdf2.Key([]byte(key), []byte(salt), 1e3, 32, sha1.New)
@@ -143,7 +143,7 @@ func decryptData(encrypted []byte, key string) string {
 	block, err := aes.NewCipher(keyDecoded)
 	util.Check(err)
 
-	mode := cipher.NewCBCDecrypter(block, encryptedIV)
+	mode := cipher.NewCBCDecrypter(block, decryptedIV)
 	decrypted := make([]byte, len(cipherTextDecoded))
 	mode.CryptBlocks(decrypted, []byte(cipherTextDecoded))
 
