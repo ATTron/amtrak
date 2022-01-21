@@ -56,6 +56,7 @@ func fetchData() string {
 	return content
 }
 
+// cleanData - massage the data out
 func cleanData() {
 	stationNumRegex := re.MustCompile(`\D*`)
 	content := fetchData()
