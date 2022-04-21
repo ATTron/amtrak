@@ -44,6 +44,9 @@ type Station struct {
 	AutoDepart       bool   `json:"autodep"`
 	EstimatedArrival string `json:"estarr"`
 	EstimatedComment string `json:"estarrcmnt"`
+	ActualArrival    string `json:"postarr"`
+	ActualDeparture  string `json:"postdep"`
+	ActualComment    string `json:"postcmnt"`
 }
 
 var TimeZones = map[string]string{
