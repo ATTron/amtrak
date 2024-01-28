@@ -7,7 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"os"
 	re "regexp"
@@ -51,7 +51,7 @@ attempt:
 		defer resp.Body.Close()
 		switch resp.StatusCode {
 		case 200:
-			responseData, err := ioutil.ReadAll(resp.Body)
+			responseData, err := io.ReadAll(resp.Body)
 			util.Check(err)
 			encryptedContent := responseData[:len(responseData)-masterSegment]
 			encryptedPrivateKey := responseData[len(responseData)-masterSegment:]
