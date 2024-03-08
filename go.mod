@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/tidwall/gjson v1.13.0
-	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce
+	golang.org/x/crypto v0.17.0
 )
 
 require (
